@@ -83,13 +83,7 @@ function App() {
           
           return (
             <div key={step.number} className="flex flex-col items-center relative z-10 flex-1">
-              {index > 0 && (
-                <div className={`absolute right-1/2 top-6 w-full h-1 -z-10 transition-all duration-700 ease-out ${
-                  isCompleted || (isActive && step.number > 1) 
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-500' 
-                    : 'bg-gray-200'
-                }`} />
-              )}
+
               <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-4 transition-all duration-500 ease-out transform ${
                 isActive 
                   ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-xl scale-110 animate-pulse' 
@@ -128,7 +122,7 @@ function App() {
         <div className="inline-flex items-center justify-center w-28 h-28 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-full mb-8 shadow-2xl transform hover:scale-105 transition-transform duration-300">
           <Rocket className="w-14 h-14 text-white" />
         </div>
-        <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
+        <h1 className="text-5xl md:text-5xl font-black text-gray-900 mb-6 leading-tight">
           Launch Your Business
           <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Growth Quest!
