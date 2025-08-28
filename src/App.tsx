@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Rocket, Shield, FileText, Sparkles, CheckCircle, Upload, Mail, User, Building, Lock, ArrowRight } from 'lucide-react';
+import { Rocket, Shield, FileText, Sparkles, CheckCircle, Upload, Mail, User, Building, Lock, ArrowRight, Phone, Briefcase } from 'lucide-react';
 
 interface FormData {
   companyName: string;
-  businessEmail: string;
-  contactPerson: string;
+  industryType: string;
+  representativeName: string;
+  representativePhone: string;
+  companyEmail: string;
   password: string;
   verificationCode: string;
+  agreeToTerms: boolean;
 }
 
 interface UploadedFile {
@@ -19,28 +22,34 @@ function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     companyName: '',
-    businessEmail: '',
-    contactPerson: '',
+    industryType: '',
+    representativeName: '',
+    representativePhone: '',
+    companyEmail: 'tech@odela.com.my',
     password: '',
-    verificationCode: ''
+    verificationCode: '',
+    agreeToTerms: false
   });
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([
-    { name: 'Financial Statements', type: 'financial', uploaded: false },
-    { name: 'Business Registration', type: 'registration', uploaded: false },
-    { name: '5-Year Business Plan', type: 'business-plan', uploaded: false }
+    { name: 'Audited Financial Statements', type: 'financial', uploaded: false },
+    { name: 'CTOS Business Profile', type: 'registration', uploaded: false },
+    { name: 'SSM Registration Document', type: 'business-plan', uploaded: false }
   ]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
 
   const steps = [
-    { number: 1, title: 'Launchpad', icon: Rocket, description: 'Launch Your Quest' },
-    { number: 2, title: 'Data Mission', icon: Shield, description: 'Verify Your Account' },
-    { number: 3, title: 'SPOT Scan', icon: FileText, description: 'Upload Documents' },
-    { number: 4, title: 'SPOT Reveal', icon: Sparkles, description: 'Generate Analysis' }
+    { number: 1, title: 'First Deal', icon: Rocket, description: 'Join the Game' },
+    { number: 2, title: 'Card Check', icon: Shield, description: 'Verify Your Hand' },
+    { number: 3, title: 'SPOT Draw', icon: FileText, description: 'Submit Your Cards' },
+    { number: 4, title: 'SPOT Play', icon: Sparkles, description: 'Reveal Your Hand' }
   ];
 
   const handleInputChange = (field: keyof FormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ 
+      ...prev, 
+      [field]: field === 'agreeToTerms' ? value === 'true' : value 
+    }));
   };
 
   const handleFileUpload = (fileType: string) => {
@@ -86,9 +95,9 @@ function App() {
 
               <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-4 transition-all duration-500 ease-out transform ${
                 isActive 
-                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-xl scale-110 animate-pulse' 
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl scale-110 animate-pulse' 
                   : isCompleted 
-                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg' 
+                    ? 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-lg' 
                     : 'bg-white border-2 border-gray-200 text-gray-400 shadow-sm'
               }`}>
                 {isCompleted ? (
@@ -100,12 +109,12 @@ function App() {
               <div className="text-center max-w-32">
                 <p className={`text-sm font-bold mb-1 transition-colors duration-300 ${
                   isActive 
-                    ? 'text-blue-600' 
+                    ? 'text-orange-600' 
                     : isCompleted 
-                      ? 'text-green-600' 
+                      ? 'text-orange-700' 
                       : 'text-gray-400'
                 }`}>
-                  Level {step.number}: {step.title}
+                  Round {step.number}: {step.title}
                 </p>
                 <p className="text-xs text-gray-500 leading-tight">{step.description}</p>
               </div>
@@ -119,17 +128,17 @@ function App() {
   const renderStep1 = () => (
     <div className="max-w-2xl mx-auto px-4">
       <div className="text-center mb-12">
-        <div className="inline-flex items-center justify-center w-28 h-28 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-full mb-8 shadow-2xl transform hover:scale-105 transition-transform duration-300">
+        <div className="inline-flex items-center justify-center w-28 h-28 bg-gradient-to-br from-orange-500 via-amber-500 to-orange-600 rounded-full mb-8 shadow-2xl transform hover:scale-105 transition-transform duration-300">
           <Rocket className="w-14 h-14 text-white" />
         </div>
         <h1 className="text-5xl md:text-5xl font-black text-gray-900 mb-6 leading-tight">
-          Launch Your Business
-          <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Growth Quest!
+          Enter the
+          <span className="block bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+            Growth Game!
           </span>
         </h1>
         <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-          We'll guide you through four simple steps to get your personalized SPOT Analysis and a clear path for sustainable growth.
+          We'll deal you through four simple rounds to get your personalized SPOT Analysis and winning strategy for sustainable growth.
         </p>
       </div>
 
@@ -137,65 +146,117 @@ function App() {
         <div className="space-y-8">
           <div className="space-y-3">
             <label className="flex items-center text-sm font-bold text-gray-700 uppercase tracking-wide">
-              <Building className="w-5 h-5 mr-3 text-blue-500" />
+              <Building className="w-5 h-5 mr-3 text-orange-500" />
               Company Name
             </label>
             <input
               type="text"
               value={formData.companyName}
               onChange={(e) => handleInputChange('companyName', e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 text-lg placeholder-gray-400 hover:border-gray-300"
+              className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-100 focus:border-orange-500 transition-all duration-300 text-lg placeholder-gray-400 hover:border-gray-300"
               placeholder="Enter your company name"
             />
           </div>
 
           <div className="space-y-3">
             <label className="flex items-center text-sm font-bold text-gray-700 uppercase tracking-wide">
-              <Mail className="w-5 h-5 mr-3 text-blue-500" />
-              Business Email
+              <Briefcase className="w-5 h-5 mr-3 text-orange-500" />
+              Industry Type
             </label>
-            <input
-              type="email"
-              value={formData.businessEmail}
-              onChange={(e) => handleInputChange('businessEmail', e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 text-lg placeholder-gray-400 hover:border-gray-300"
-              placeholder="your.email@company.com"
-            />
+            <select
+              value={formData.industryType}
+              onChange={(e) => handleInputChange('industryType', e.target.value)}
+              className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 text-lg placeholder-gray-400 hover:border-gray-300 bg-white"
+            >
+              <option value="" disabled>Select your industry</option>
+              <option value="technology">Technology</option>
+              <option value="healthcare">Healthcare</option>
+              <option value="finance">Finance</option>
+              <option value="retail">Retail</option>
+              <option value="manufacturing">Manufacturing</option>
+              <option value="education">Education</option>
+              <option value="consulting">Consulting</option>
+              <option value="real-estate">Real Estate</option>
+              <option value="food-beverage">Food & Beverage</option>
+              <option value="transportation">Transportation</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="other">Other</option>
+            </select>
           </div>
 
           <div className="space-y-3">
             <label className="flex items-center text-sm font-bold text-gray-700 uppercase tracking-wide">
-              <User className="w-5 h-5 mr-3 text-blue-500" />
-              Contact Person
+              <User className="w-5 h-5 mr-3 text-orange-500" />
+              Representative Name
             </label>
             <input
               type="text"
-              value={formData.contactPerson}
-              onChange={(e) => handleInputChange('contactPerson', e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 text-lg placeholder-gray-400 hover:border-gray-300"
-              placeholder="Full name of primary contact"
+              value={formData.representativeName}
+              onChange={(e) => handleInputChange('representativeName', e.target.value)}
+              className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-100 focus:border-orange-500 transition-all duration-300 text-lg placeholder-gray-400 hover:border-gray-300"
+              placeholder="Enter your full name"
             />
           </div>
 
           <div className="space-y-3">
             <label className="flex items-center text-sm font-bold text-gray-700 uppercase tracking-wide">
-              <Lock className="w-5 h-5 mr-3 text-blue-500" />
-              Password
+              <Phone className="w-5 h-5 mr-3 text-orange-500" />
+              Representative Phone Number
+            </label>
+            <input
+              type="tel"
+              value={formData.representativePhone}
+              onChange={(e) => handleInputChange('representativePhone', e.target.value)}
+              className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-100 focus:border-orange-500 transition-all duration-300 text-lg placeholder-gray-400 hover:border-gray-300"
+              placeholder="Enter your phone number (e.g., 0123456789)"
+            />
+          </div>
+
+          <div className="space-y-3">
+            <label className="flex items-center text-sm font-bold text-gray-700 uppercase tracking-wide">
+              <Mail className="w-5 h-5 mr-3 text-blue-500" />
+              Company Email
+            </label>
+            <input
+              type="email"
+              value={formData.companyEmail}
+              onChange={(e) => handleInputChange('companyEmail', e.target.value)}
+              className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-100 focus:border-orange-500 transition-all duration-300 text-lg placeholder-gray-400 hover:border-gray-300"
+              placeholder="tech@odela.com.my"
+            />
+          </div>
+
+          <div className="space-y-3">
+            <label className="flex items-center text-sm font-bold text-gray-700 uppercase tracking-wide">
+              <Lock className="w-5 h-5 mr-3 text-orange-500" />
+              Set Password
             </label>
             <input
               type="password"
               value={formData.password}
               onChange={(e) => handleInputChange('password', e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 text-lg placeholder-gray-400 hover:border-gray-300"
-              placeholder="Create a secure password"
+              className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-100 focus:border-orange-500 transition-all duration-300 text-lg placeholder-gray-400 hover:border-gray-300"
+              placeholder="••••••••••••••"
             />
+          </div>
+
+          <div className="space-y-3">
+            <label className="flex items-start text-sm font-bold text-gray-700 tracking-wide">
+              <input
+                type="checkbox"
+                checked={formData.agreeToTerms}
+                onChange={(e) => handleInputChange('agreeToTerms', e.target.checked.toString())}
+                className="w-5 h-5 mr-3 mt-0.5 text-orange-500 border-2 border-gray-300 rounded focus:ring-orange-500 focus:ring-2"
+              />
+              I agree to the terms and conditions
+            </label>
           </div>
 
           <button
             onClick={handleNextStep}
-            className="w-full bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 text-white py-5 px-8 rounded-2xl font-bold text-xl hover:from-blue-600 hover:via-purple-600 hover:to-indigo-700 transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 shadow-2xl hover:shadow-3xl flex items-center justify-center group"
+            className="w-full bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white py-5 px-8 rounded-2xl font-bold text-xl hover:from-orange-600 hover:via-amber-600 hover:to-orange-700 transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 shadow-2xl hover:shadow-3xl flex items-center justify-center group"
           >
-            Launch Quest
+            Get Started
             <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
           </button>
         </div>
@@ -205,21 +266,21 @@ function App() {
 
   const renderStep2 = () => (
     <div className="max-w-2xl mx-auto text-center px-4">
-      <div className="inline-flex items-center justify-center w-28 h-28 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-full mb-10 shadow-2xl transform hover:scale-105 transition-transform duration-300">
+      <div className="inline-flex items-center justify-center w-28 h-28 bg-gradient-to-br from-orange-500 via-amber-500 to-orange-600 rounded-full mb-10 shadow-2xl transform hover:scale-105 transition-transform duration-300">
         <Shield className="w-14 h-14 text-white" />
       </div>
       <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-8 leading-tight">
         Check Your Inbox to
-        <span className="block bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
-          Begin the Mission!
+        <span className="block bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+          Verify Your Hand!
         </span>
       </h1>
       <p className="text-xl md:text-2xl text-gray-600 mb-12 leading-relaxed">
-        We've sent a secure link to{' '}
-        <span className="font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-lg">
-          {formData.businessEmail}
+        We've dealt a secure verification card to{' '}
+        <span className="font-bold text-orange-600 bg-orange-50 px-3 py-1 rounded-lg">
+          {formData.companyEmail}
         </span>
-        . Click it to verify your account and get ready for your next objective.
+        . Click it to verify your hand and get ready for the next round.
       </p>
 
       <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border border-gray-100 mb-8">
@@ -232,7 +293,7 @@ function App() {
               type="text"
               value={formData.verificationCode}
               onChange={(e) => handleInputChange('verificationCode', e.target.value)}
-              className="w-full px-6 py-6 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-center text-3xl font-mono tracking-widest placeholder-gray-300 hover:border-gray-300"
+              className="w-full px-6 py-6 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-100 focus:border-orange-500 transition-all duration-300 text-center text-3xl font-mono tracking-widest placeholder-gray-300 hover:border-gray-300"
               placeholder="000000"
               maxLength={6}
             />
@@ -244,7 +305,7 @@ function App() {
             </button>
             <button
               onClick={handleNextStep}
-              className="flex-1 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-600 text-white py-4 px-6 rounded-2xl font-bold text-lg hover:from-green-600 hover:via-emerald-600 hover:to-teal-700 transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 shadow-2xl"
+              className="flex-1 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white py-4 px-6 rounded-2xl font-bold text-lg hover:from-orange-600 hover:via-amber-600 hover:to-orange-700 transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 shadow-2xl"
             >
               Verify & Continue
             </button>
@@ -257,17 +318,14 @@ function App() {
   const renderStep3 = () => (
     <div className="max-w-6xl mx-auto px-4">
       <div className="text-center mb-16">
-        <div className="inline-flex items-center justify-center w-28 h-28 bg-gradient-to-br from-purple-500 via-pink-500 to-rose-600 rounded-full mb-10 shadow-2xl transform hover:scale-105 transition-transform duration-300">
+        <div className="inline-flex items-center justify-center w-28 h-28 bg-gradient-to-br from-orange-500 via-amber-500 to-orange-600 rounded-full mb-10 shadow-2xl transform hover:scale-105 transition-transform duration-300">
           <FileText className="w-14 h-14 text-white" />
         </div>
         <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-8 leading-tight">
-          Prepare for the
-          <span className="block bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            SPOT Scan: We Need Your Data!
-          </span>
+          Upload your Files
         </h1>
         <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-4xl mx-auto">
-          To generate your detailed SPOT Analysis, please upload the following documents. Each upload is a mini-mission!
+          To generate your detailed SPOT Analysis, please submit the following cards from your business deck. Each card reveals part of your winning strategy!
         </p>
       </div>
 
@@ -290,18 +348,18 @@ function App() {
             
             {!file.uploaded ? (
               <div 
-                className="border-3 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-purple-400 hover:bg-purple-50 transition-all duration-300 cursor-pointer group"
+                className="border-3 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-orange-400 hover:bg-orange-50 transition-all duration-300 cursor-pointer group"
                 onClick={() => handleFileUpload(file.type)}
               >
-                <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4 group-hover:text-purple-500 group-hover:scale-110 transition-all duration-300" />
-                <p className="text-lg text-gray-600 font-semibold group-hover:text-purple-600">Click to upload</p>
+                <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4 group-hover:text-orange-500 group-hover:scale-110 transition-all duration-300" />
+                <p className="text-lg text-gray-600 font-semibold group-hover:text-orange-600">Click to upload</p>
                 <p className="text-sm text-gray-500 mt-2">or drag & drop</p>
               </div>
             ) : (
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl p-6 text-center">
                 <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-3" />
                 <p className="text-lg text-green-700 font-bold">Upload Complete!</p>
-                <p className="text-sm text-green-600 mt-1">Mission accomplished</p>
+                <p className="text-sm text-green-600 mt-1">File uploaded successfully</p>
               </div>
             )}
           </div>
@@ -314,13 +372,13 @@ function App() {
           disabled={!allFilesUploaded}
           className={`px-16 py-5 rounded-2xl font-bold text-xl transition-all duration-300 transform ${
             allFilesUploaded
-              ? 'bg-gradient-to-r from-purple-500 via-pink-500 to-rose-600 text-white hover:from-purple-600 hover:via-pink-600 hover:to-rose-700 hover:scale-105 hover:-translate-y-1 shadow-2xl hover:shadow-3xl'
+              ? 'bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white hover:from-orange-600 hover:via-amber-600 hover:to-orange-700 hover:scale-105 hover:-translate-y-1 shadow-2xl hover:shadow-3xl'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-lg'
           }`}
         >
           {allFilesUploaded ? (
             <>
-              Data Collected! Proceed to Analysis
+              Continue to Analysis
               <ArrowRight className="w-6 h-6 ml-3 inline" />
             </>
           ) : (
@@ -333,34 +391,31 @@ function App() {
 
   const renderStep4 = () => (
     <div className="max-w-4xl mx-auto text-center px-4">
-      <div className="inline-flex items-center justify-center w-28 h-28 bg-gradient-to-br from-yellow-500 via-orange-500 to-red-600 rounded-full mb-10 shadow-2xl transform hover:scale-105 transition-transform duration-300">
-        <Sparkles className="w-14 h-14 text-white" />
-      </div>
 
       {!isAnalyzing && analysisProgress === 0 ? (
         <>
           <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-8 leading-tight">
             Ready for the
-            <span className="block bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
-              SPOT Reveal!
+            <span className="block bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+              SPOT Showdown!
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 mb-16 leading-relaxed max-w-3xl mx-auto">
-            All your data has been collected. We're ready to analyze your business and create your personalized SPOT Analysis.
+            All your cards have been played. We're ready to analyze your hand and reveal your personalized SPOT winning strategy.
           </p>
           <button
             onClick={startAnalysis}
-            className="bg-gradient-to-r from-yellow-500 via-orange-500 to-red-600 text-white py-6 px-16 rounded-2xl font-bold text-2xl hover:from-yellow-600 hover:via-orange-600 hover:to-red-700 transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 shadow-2xl hover:shadow-3xl"
+            className="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white py-6 px-16 rounded-2xl font-bold text-2xl hover:from-orange-600 hover:via-amber-600 hover:to-orange-700 transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 shadow-2xl hover:shadow-3xl"
           >
-            Start SPOT Analysis
+            Start Analysis
           </button>
         </>
       ) : analysisProgress < 100 ? (
         <>
           <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-8 leading-tight">
-            Analysis in Progress:
-            <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Your SPOT is being built!
+            Cards in Play:
+            <span className="block bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+              Your SPOT Hand is Being Dealt!
             </span>
           </h1>
           
@@ -368,9 +423,9 @@ function App() {
             <div className="w-40 h-40 mx-auto mb-12 relative">
               <div className="absolute inset-0 border-8 border-gray-200 rounded-full"></div>
               <div 
-                className="absolute inset-0 border-8 border-transparent border-t-blue-500 rounded-full animate-spin"
+                className="absolute inset-0 border-8 border-transparent border-t-orange-500 rounded-full animate-spin"
                 style={{
-                  background: `conic-gradient(from 0deg, #3B82F6 ${analysisProgress * 3.6}deg, transparent ${analysisProgress * 3.6}deg)`
+                  background: `conic-gradient(from 0deg, #F97316 ${analysisProgress * 3.6}deg, transparent ${analysisProgress * 3.6}deg)`
                 }}
               ></div>
               <div className="absolute inset-0 flex items-center justify-center">
@@ -380,20 +435,20 @@ function App() {
 
             <div className="space-y-6 text-left max-w-lg mx-auto">
               {[
-                { text: 'Analyzing your financial health...', threshold: 0 },
-                { text: 'Evaluating market opportunities...', threshold: 25 },
-                { text: 'Building your strategic roadmap...', threshold: 50 },
-                { text: 'Finalizing your growth plan...', threshold: 75 }
+                { text: 'Dealing your financial cards...', threshold: 0 },
+                { text: 'Shuffling market opportunities...', threshold: 25 },
+                { text: 'Building your winning hand...', threshold: 50 },
+                { text: 'Preparing your ace strategy...', threshold: 75 }
               ].map((step, index) => (
                 <div key={index} className={`flex items-center transition-all duration-500 p-4 rounded-2xl ${
                   analysisProgress >= step.threshold 
-                    ? 'opacity-100 bg-blue-50 border-2 border-blue-200' 
+                    ? 'opacity-100 bg-orange-50 border-2 border-orange-200' 
                     : 'opacity-40 bg-gray-50 border-2 border-gray-200'
                 }`}>
                   {analysisProgress >= step.threshold + 25 ? (
                     <CheckCircle className="w-6 h-6 text-green-500 mr-4 flex-shrink-0" />
                   ) : (
-                    <div className="w-6 h-6 border-3 border-blue-500 border-t-transparent rounded-full animate-spin mr-4 flex-shrink-0"></div>
+                    <div className="w-6 h-6 border-3 border-orange-500 border-t-transparent rounded-full animate-spin mr-4 flex-shrink-0"></div>
                   )}
                   <span className="text-lg font-semibold text-gray-700">{step.text}</span>
                 </div>
@@ -404,20 +459,20 @@ function App() {
       ) : (
         <>
           <div className="mb-12">
-            <div className="inline-flex items-center justify-center w-40 h-40 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-full mb-8 shadow-3xl animate-bounce">
+            <div className="inline-flex items-center justify-center w-40 h-40 bg-gradient-to-br from-orange-500 via-amber-500 to-orange-600 rounded-full mb-8 shadow-3xl animate-bounce">
               <CheckCircle className="w-20 h-20 text-white" />
             </div>
             <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-8 leading-tight">
-              Quest Completed!
+              SPOT Complete!
               <span className="block text-6xl md:text-8xl">🎉</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-16 leading-relaxed max-w-3xl mx-auto">
-              Your personalized SPOT Analysis is ready! Discover your business strengths, opportunities, and growth roadmap.
+              Your personalized SPOT Analysis is ready! Discover your winning hand of business strengths, opportunities, and growth strategy.
             </p>
           </div>
 
-          <button className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-600 text-white py-6 px-16 rounded-2xl font-bold text-2xl hover:from-green-600 hover:via-emerald-600 hover:to-teal-700 transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 shadow-2xl hover:shadow-3xl">
-            View Your SPOT Analysis
+          <button className="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white py-6 px-16 rounded-2xl font-bold text-2xl hover:from-orange-600 hover:via-amber-600 hover:to-orange-700 transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 shadow-2xl hover:shadow-3xl">
+            View Your Results
           </button>
         </>
       )}
